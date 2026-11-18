@@ -575,7 +575,6 @@ sp500-stock-market-analysis/
 ├── data_quality_report.csv
 │
 ├── S&P_500_Stock_Prices .ipynb
-├── Untitled.ipynb
 │
 ├── sp500_analysis_queries.sql
 ├── SP500_Dashboard.pbix
