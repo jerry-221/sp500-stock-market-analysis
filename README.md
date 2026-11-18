@@ -1,176 +1,569 @@
-# S&P 500 Stock Market Performance & Trend Analysis (2014–2017)
+# S&P 500 Stock Market Performance and Trend Analysis (2014–2017)
 
-<p align="center">
-  <strong>An End-to-End Data Analytics & Business Intelligence Project</strong>
-  <br/>
-  Turning 500,000+ raw stock market records into actionable investment and risk insights using Python, MySQL, and Power BI.
-</p>
+## End-to-End Data Analytics and Business Intelligence Project
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img src="https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?style=for-the-badge&logo=powerbi&logoColor=black" />
-  <img src="https://img.shields.io/badge/Status-Completed-2E8B57?style=for-the-badge" />
-</p>
+An end-to-end financial data analytics project transforming approximately 497,000 historical stock market records into meaningful insights using Python, MySQL, and Power BI.
+
+The project focuses on historical stock performance, market trends, cumulative returns, volatility, maximum drawdowns, and trading activity across S&P 500 companies between 2014 and 2017.
 
 ---
 
 ## 1. Project Overview
 
-This is an end-to-end data analytics and business intelligence solution analyzing historical daily stock data for S&P 500 companies from January 2014 to December 2017. 
+Financial market datasets contain large volumes of daily trading information. However, raw stock prices alone do not provide sufficient information to understand market performance, identify risk patterns, or compare different stocks effectively.
 
-The project transforms nearly 500,000 raw records into structured insights regarding market trends, individual stock performance, volatility, and trading activity. 
+This project was developed to transform raw historical stock market data into a structured analytical solution.
 
-By utilizing Python for data engineering, MySQL for advanced window-function analysis, and Power BI for interactive visualization, the project identifies the macroeconomic shifts and individual outliers that defined the market during this four-year window.
+The complete workflow covers data collection, data cleaning, exploratory data analysis, feature engineering, SQL-based business analysis, and interactive dashboard development.
 
-**The objective:** Transform raw market data into meaningful insights that support risk assessment, trend identification, and historical performance comparison.
+Python was used for data preparation and statistical analysis, MySQL for querying and extracting business insights, and Power BI for building an interactive three-page analytical report.
 
-## 2. Business Problem & Objectives
+### Project Objectives
 
-### The Business Problem
+- Analyze historical S&P 500 stock market performance.
+- Identify the highest and lowest performing stocks.
+- Calculate daily returns and cumulative performance.
+- Understand historical market volatility and price fluctuations.
+- Identify stocks experiencing significant drawdowns.
+- Analyze the relationship between trading volume and price movements.
+- Develop an interactive dashboard for exploring stock market trends.
 
-Raw stock data (Open, High, Low, Close, Volume) contains daily noise but lacks the engineered metrics required to measure risk, momentum, and true performance. Without normalizing this data, it is impossible to fairly compare a $10 stock against a $1,000 stock, or identify which assets are generating sustainable returns versus those experiencing high volatility.
+## 2. Business Problem
 
-### Key Business Questions
+The raw dataset contains daily Open, High, Low, Close, and Volume information for multiple stocks.
 
-1. Which stocks generated the highest cumulative returns between 2014 and 2017?
-2. Which stocks experienced the most severe price declines and maximum drawdowns?
-3. Which years and months recorded the highest average daily returns and volatility?
-4. Are high-volume trading days associated with larger intraday price movements?
-5. Which stocks consistently traded above their 30-day moving averages?
-6. How do top-performing stocks (e.g., NVDA, NFLX) compare against market averages over time?
+Although these values describe daily market activity, they do not directly answer important analytical questions.
+
+For example:
+
+- Which stocks performed best over the selected period?
+- Which companies experienced the largest declines?
+- When was market volatility highest?
+- Did unusual trading activity coincide with larger price movements?
+- How did individual stocks perform compared with the broader market?
+
+The primary challenge was to transform raw financial records into reliable analytical metrics that could answer these questions.
+
+### Analytical Approach
+
+The project follows a structured workflow:
+
+1. Inspect and understand the raw dataset.
+2. Identify missing values, duplicates, and invalid records.
+3. Clean and validate the dataset using Python.
+4. Perform exploratory data analysis.
+5. Engineer additional financial indicators.
+6. Import the prepared dataset into MySQL.
+7. Execute analytical queries using aggregations, CTEs, and window functions.
+8. Build a dimensional data model in Power BI.
+9. Develop interactive dashboards and derive historical insights.
 
 ## 3. Dataset Information
 
 | Attribute | Details |
 |---|---|
-| Dataset | S&P 500 Stock Prices (2014-2017) |
-| Source | Historical Financial Market Data |
-| Records | 497,472 raw rows |
-| Columns | 7 base columns (expanded to 30+ via feature engineering) |
-| Time Period | Jan 2014 – Dec 2017 |
-| Domain | Finance / Stock Market Analytics |
+| Dataset | S&P 500 Stock Prices |
+| Domain | Finance and Stock Market Analytics |
+| Time Period | January 2014 – December 2017 |
+| Raw Records | 497,472 |
+| Original Columns | 7 |
+| Final Features | 30+ |
+| Main Entity | Stock Symbol |
+| Data Frequency | Daily Trading Records |
 
-### Important Dataset Attributes
+### Dataset Columns
 
-- `symbol` – Stock ticker identifier (e.g., AAPL, NVDA).
-- `date` – Trading date.
-- `open`, `high`, `low`, `close` – Daily price action.
-- `volume` – Number of shares traded.
-- `daily_return_pct` – Engineered percentage change in closing price.
-- `ma_30` – Engineered 30-day moving average.
-- `volatility_30d` – Engineered rolling standard deviation of returns.
-- `drawdown_pct` – Engineered maximum drawdown from peak.
+| Column | Description |
+|---|---|
+| symbol | Unique stock ticker identifier |
+| date | Trading date |
+| open | Opening stock price |
+| high | Highest stock price during the trading day |
+| low | Lowest stock price during the trading day |
+| close | Closing stock price |
+| volume | Number of shares traded |
 
-**Dataset Files:**
-- [View Raw Dataset](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/S%26P%20500%20Stock%20Prices%202014-2017.csv)
-- [View Cleaned Dataset](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/S%26P_500_Stock_Prices_clean.csv)
+### Dataset Source
 
-## 4. Tools & Technologies
+The project uses the historical S&P 500 Stock Prices dataset covering 2014–2017.
 
-| Technology | Libraries / Concepts | Purpose |
+Raw Dataset: [View Raw Dataset](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/S%26P%20500%20Stock%20Prices%202014-2017.csv)
+
+Cleaned Dataset: [View Cleaned Dataset](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/S%26P_500_Stock_Prices_clean.csv)
+
+## 4. Tools and Technologies
+
+| Technology | Libraries and Concepts | Purpose |
 |---|---|---|
 | Python | Python 3.10+ | Data preparation and analysis |
-| Pandas | DataFrames, Transform, GroupBy | Data cleaning, rolling windows, shifting |
-| NumPy | `np.select`, Mathematical logic | Conditional classification and metrics |
-| Matplotlib | Visualization | Exploratory data visualization |
-| Seaborn | Statistical visualization | Distribution and trend analysis |
-| MySQL | MySQL 8.0 | Database management and SQL analysis |
-| Power BI | DAX, Star Schema, Interactive Visuals | Dashboard development and BI |
+| Pandas | DataFrames, GroupBy, Transform, Rolling | Data cleaning and manipulation |
+| NumPy | Conditional logic and numerical operations | Feature engineering |
+| Matplotlib | Data visualization | Statistical charts |
+| Seaborn | Statistical visualization | Distribution and relationship analysis |
+| MySQL | MySQL 8.0 | Database management and analytical queries |
+| Power BI | Power Query, DAX, Data Modelling | Interactive business intelligence |
+| Jupyter Notebook | Interactive development | Documentation and execution |
+| Git and GitHub | Version control | Project management and documentation |
 
-## 5. Methodology: Problems, Solutions & Rationale
+## 5. Data Cleaning and Quality Assurance
 
-During the data preparation and analysis phases, several critical data anomalies and architectural challenges were identified and resolved.
+The first major stage involved examining the raw dataset and identifying data quality issues.
 
-### Challenge 1: Missing and Illogical OHLC Data
-**The Problem:** The raw dataset contained missing values and logical errors, such as a `high` price being lower than the `low` price.
-**The Solution:** Instead of imputing prices with averages (which creates artificial zero-volatility days), these invalid rows were dropped. The data was strictly validated to ensure `low <= open, close <= high`. 
-**The Rationale:** In financial modeling, data integrity is paramount. Imputing stock prices distorts historical reality and severely skews technical indicators like moving averages.
+Instead of immediately performing analysis, the dataset was inspected to understand its structure, missing values, duplicates, and inconsistencies.
 
-### Challenge 2: The `GOOG` / `GOOGL` Data Anomaly
-**The Problem:** The dataset contained a single stray row for `GOOG` (which represents the same company as `GOOGL`), which would pollute time-series aggregations.
-**The Solution:** The single `GOOG` row was dropped to maintain a clean, 1-to-1 relationship per trading day per unique ticker.
+### 5.1 Initial Data Inspection
 
-### Challenge 3: Silent Forward-Filling in Returns
-**The Problem:** Pandas `pct_change()` defaults to forward-filling missing data, which can create fake returns on days where data should simply be blank.
-**The Solution:** Used `.pct_change(fill_method=None)` to strictly calculate returns only when the previous valid trading day exists, preventing artificial data leakage.
+The following checks were performed:
 
-### Challenge 4: Calculating Cumulative Returns in SQL
-**The Problem:** Calculating the cumulative return of a stock requires finding the first and last available trading price. A simple `MIN(close)` and `MAX(close)` is incorrect because it finds the all-time high/low, not the start/end price.
-**The Solution:** Utilized SQL Window Functions (`ROW_NUMBER() OVER (PARTITION BY symbol ORDER BY date)`) inside Common Table Expressions (CTEs) to accurately isolate the chronological first and last day for every ticker.
+- Dataset dimensions and column information.
+- Data types of individual columns.
+- Missing value distribution.
+- Duplicate records.
+- Unique stock symbols.
+- Date range validation.
+- Statistical summaries.
+- Invalid financial values.
 
-## 6. Python Analysis – Data Cleaning & EDA
+### 5.2 Handling Missing Values
 
-Python was used to perform data cleaning, quality assurance, and feature engineering. A total of 25+ new columns were created to normalize the data.
+**Problem:**
 
-Key engineered features include:
-- **Return Metrics:** `daily_return_pct`, `intraday_range_pct`, `gap_pct`.
-- **Trend Indicators:** 7, 30, and 50-day Moving Averages (`ma_7`, `ma_30`, `ma_50`).
-- **Risk Indicators:** 30-day rolling volatility and cumulative drawdown.
-- **Activity Indicators:** Relative volume (daily volume divided by 30-day average volume).
+Some records contained missing values in important financial columns, including Open, High, Low, and Close.
 
-**Python Notebook:**
-- [Explore Python Data Cleaning & EDA Notebook](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/S%26P_500_Stock_Prices%20.ipynb)
-- [View Data Quality Report](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/data_quality_report.csv)
+**Solution:**
 
-## 7. SQL Analysis – MySQL
+Records containing invalid or missing essential OHLC values were removed rather than replacing historical prices with estimated values.
 
-After cleaning, the dataset was imported into MySQL. Over 20 analytical queries were developed, ranging from basic aggregations to advanced window functions.
+**Why this approach?**
+
+Stock prices represent actual historical market observations. Replacing missing prices with averages or estimated values could introduce artificial price movements and distort return and volatility calculations.
+
+### 5.3 Duplicate Record Removal
+
+**Problem:**
+
+Duplicate records can affect stock-level aggregations, daily returns, and rolling calculations.
+
+**Solution:**
+
+Duplicate records were identified and removed using the stock symbol and trading date combination.
+
+**Why this approach?**
+
+A stock should have one valid observation for a given trading date in this dataset. Removing duplicate observations prevents double-counting during analysis.
+
+### 5.4 OHLC Validation
+
+**Problem:**
+
+Financial data can contain logically inconsistent price values.
+
+For example, the High price should not be lower than the Low price.
+
+**Solution:**
+
+The following validation conditions were applied:
+
+- High must be greater than or equal to Low.
+- High must be greater than or equal to Open.
+- High must be greater than or equal to Close.
+- Low must be less than or equal to Open.
+- Low must be less than or equal to Close.
+
+Invalid records were excluded from the analytical dataset.
+
+**Why this approach?**
+
+These checks help maintain logical consistency in historical price observations and prevent invalid values from affecting financial calculations.
+
+### 5.5 Handling the GOOG and GOOGL Anomaly
+
+**Problem:**
+
+The dataset contained a single isolated GOOG record alongside the GOOGL stock records.
+
+**Solution:**
+
+The isolated GOOG observation was excluded from the analytical dataset.
+
+**Why this approach?**
+
+GOOG and GOOGL are different share classes of Alphabet. The isolated observation did not provide a meaningful time series for analysis and could create inconsistencies in stock-level calculations.
+
+### 5.6 Date and Data Type Validation
+
+Date columns were converted into appropriate datetime formats.
+
+Numerical columns were checked to ensure they could be used correctly in calculations.
+
+**Why this approach?**
+
+Correct data types are essential for chronological sorting, date filtering, time-series calculations, and Power BI date relationships.
+
+### 5.7 Data Quality Report
+
+A separate data quality report was generated to document the cleaning process and provide transparency into the prepared dataset.
+
+Data Quality Report: [View Data Quality Report](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/data_quality_report.csv)
+
+## 6. Exploratory Data Analysis
+
+After cleaning the dataset, exploratory data analysis was performed to understand the overall structure and distribution of historical stock market activity.
+
+### Key EDA Activities
+
+- Distribution of stock prices.
+- Daily trading volume analysis.
+- Stock-wise performance comparison.
+- Missing value analysis.
+- Historical closing price trends.
+- Daily return distribution.
+- Correlation between numerical variables.
+- Identification of unusual observations.
+
+### Visualization Techniques
+
+| Visualization | Analytical Purpose |
+|---|---|
+| Line Chart | Understand price movements over time |
+| Histogram | Examine the distribution of returns |
+| Box Plot | Identify outliers and price variation |
+| Heatmap | Understand relationships between numerical variables |
+| Bar Chart | Compare stock-level performance |
+| Scatter Plot | Explore relationships between trading indicators |
+
+**Why EDA was necessary**
+
+EDA helped identify patterns, unusual observations, and relationships before creating advanced financial indicators or performing SQL analysis.
+
+## 7. Feature Engineering
+
+Raw stock market data does not directly provide all the indicators needed for meaningful performance and risk analysis.
+
+Therefore, additional analytical features were created using Pandas and NumPy.
+
+More than 25 additional features were developed during the feature engineering stage.
+
+### 7.1 Daily Returns
+
+**Feature:** `daily_return_pct`
+
+Measures the percentage change in closing price compared with the previous available trading observation.
+
+**Formula:**
+
+Daily Return = ((Current Close - Previous Close) / Previous Close) × 100
+
+**Why it was used:**
+
+Percentage returns make it easier to compare the performance of stocks with different price levels.
+
+### 7.2 Moving Averages
+
+**Features:**
+
+- `ma_7`
+- `ma_30`
+- `ma_50`
+
+Moving averages calculate the average closing price over a selected rolling window.
+
+**Why they were used:**
+
+They help identify short-term and medium-term price trends while reducing the impact of daily price fluctuations.
+
+### 7.3 Rolling Volatility
+
+**Feature:** `volatility_30d`
+
+Calculated using the rolling standard deviation of daily returns over a 30-observation window.
+
+**Why it was used:**
+
+Volatility helps measure how widely daily returns fluctuate over time and provides an indication of historical price variability.
+
+### 7.4 Maximum Drawdown
+
+**Feature:** `drawdown_pct`
+
+Measures the percentage decline from a stock's previous running peak.
+
+**Why it was used:**
+
+It helps identify the depth of historical price declines and provides an additional perspective on downside risk.
+
+### 7.5 Intraday Price Range
+
+**Feature:** `intraday_range_pct`
+
+Measures the percentage difference between the daily High and Low prices relative to the opening price.
+
+**Why it was used:**
+
+It helps understand the magnitude of price movements within individual trading sessions.
+
+### 7.6 Gap Percentage
+
+**Feature:** `gap_pct`
+
+Measures the percentage difference between the current opening price and the previous available closing price.
+
+**Why it was used:**
+
+It helps identify overnight price differences between consecutive trading sessions.
+
+### 7.7 Relative Volume
+
+**Feature:** `relative_volume`
+
+Compares daily trading volume with its 30-day average volume.
+
+**Why it was used:**
+
+It helps identify periods of unusually high or low trading activity compared with a stock's recent historical volume.
+
+### Important Technical Consideration
+
+During return calculations, Pandas `pct_change()` was used with `fill_method=None`.
+
+This prevents automatic forward-filling of missing observations and avoids generating artificial returns from values that were not actually observed.
+
+Rolling calculations were grouped by stock symbol before being applied.
+
+This ensures that one company's historical values do not affect another company's moving averages or volatility calculations.
+
+## 8. SQL Analysis Using MySQL
+
+After data cleaning and feature engineering, the prepared dataset was imported into MySQL for structured analytical querying.
+
+More than 20 SQL queries were developed to answer the project's business questions.
 
 ### SQL Concepts Applied
 
 | SQL Concept | Application |
 |---|---|
-| SELECT & WHERE | Filtering by year, stock, or volume thresholds |
-| GROUP BY | Yearly and monthly market performance |
-| Aggregate Functions | Average returns, standard deviation (volatility) |
-| CTEs (WITH) | Structuring complex multi-step analyses |
-| Window Functions | `ROW_NUMBER()` for first/last price extraction |
-| NTILE() | Dividing trading days into volume quintiles |
-| DENSE_RANK() | Ranking stock performance year-by-year |
-| Conditional Aggregation | Isolating positive vs. negative trading days |
+| SELECT | Retrieve relevant stock information |
+| WHERE | Filter stocks and trading periods |
+| GROUP BY | Analyze stock-wise and time-based performance |
+| ORDER BY | Sort analytical results |
+| Aggregate Functions | Calculate averages, totals, minimums, and maximums |
+| CASE | Classify positive and negative trading days |
+| Subqueries | Perform nested analytical calculations |
+| CTEs | Organize complex analytical queries |
+| Window Functions | Perform chronological stock analysis |
+| ROW_NUMBER() | Identify first and last trading observations |
+| DENSE_RANK() | Rank stock performance |
+| NTILE() | Divide observations into volume groups |
+| LAG() | Access previous trading observations |
 
-**SQL File:**
-- [Explore SQL Business Analysis Queries](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/sp500_analysis_queries.sql)
+### Key SQL Business Analysis
 
-## 8. Power BI Dashboard
+1. Identify the highest-performing stocks based on cumulative returns.
+2. Identify the lowest-performing stocks.
+3. Calculate yearly and monthly average returns.
+4. Analyze positive and negative trading days.
+5. Compare stock volatility.
+6. Identify maximum historical drawdowns.
+7. Analyze trading volume distribution.
+8. Compare high-volume and low-volume trading sessions.
+9. Rank stock performance using window functions.
+10. Identify first and last available closing prices.
 
-Developed a three-page interactive Power BI dashboard utilizing a Star Schema (`FactStockPrices`, `DimDate`, `DimStock`) to optimize performance and filtering.
+### Important SQL Challenge: Cumulative Return
 
-### Dashboard Preview
+**Problem:**
 
-#### Page 1 – Market Overview
-Focuses on macro-level market trends over the four years, highlighting average closing prices and the ratio of positive to negative trading days.
-![Market Overview](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/Dashboard_Screenshots/page1_market_overview.png)
+Using `MIN(close)` and `MAX(close)` to calculate cumulative returns would produce incorrect results because these functions identify the lowest and highest prices, not the chronological starting and ending prices.
 
-#### Page 2 – Stock Performance (Winners & Losers)
-Identifies the top and bottom cumulative performers. Includes a drill-down chart to view an individual stock's price against its moving averages.
-![Stock Performance](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/Dashboard_Screenshots/page2_stock_performance.png)
+**Solution:**
 
-#### Page 3 – Volatility & Activity
-Analyzes risk. It highlights the most volatile stocks, maximum drawdowns, and plots the relationship between unusual trading volume and intraday price ranges.
-![Volatility & Activity](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/Dashboard_Screenshots/page3_volatility_activity.png)
+CTEs and `ROW_NUMBER()` were used with chronological ordering to identify the first and last available observations for each stock.
+
+**Why this approach?**
+
+Chronological identification ensures that cumulative performance is calculated using the actual starting and ending prices rather than historical price extremes.
+
+SQL Analysis File: [Explore SQL Queries](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/sp500_analysis_queries.sql)
+
+## 9. Power BI Dashboard Development
+
+Power BI was used to transform the prepared analytical data into an interactive three-page report.
+
+The report was developed using a dimensional data model, DAX measures, interactive slicers, and multiple visualization types.
+
+### 9.1 Data Modelling
+
+A Star Schema approach was implemented.
+
+The model consists of:
+
+**Fact Table**
+
+`FactStockPrices`
+
+Contains stock-level historical observations and analytical numerical values.
+
+**Dimension Tables**
+
+`DimDate`
+
+Contains date-related attributes such as Year, Quarter, Month, and Date.
+
+`DimStock`
+
+Contains stock identification attributes such as Symbol.
+
+**Why Star Schema?**
+
+A Star Schema separates numerical transaction data from descriptive dimensions.
+
+This makes filtering, aggregation, and report development easier to manage and provides a structured foundation for analytical reporting.
+
+### 9.2 DAX Measures
+
+DAX measures were developed to calculate important financial indicators dynamically.
+
+These measures support:
+
+- Average Closing Price
+- Total Trading Volume
+- Average Daily Return
+- Positive Trading Days
+- Negative Trading Days
+- Cumulative Returns
+- Stock Performance Rankings
+- Volatility Analysis
+- Drawdown Analysis
+
+Measures were designed to respond to report filters and slicer selections.
+
+### 9.3 Dashboard Pages
+
+#### Page 1: Market Overview
+
+**Objective:** Understand the overall historical market performance.
+
+Key elements:
+
+- Market performance overview.
+- Average closing price.
+- Total trading volume.
+- Positive and negative trading days.
+- Historical price trends.
+- Year and quarter filters.
+
+**Business Value:**
+
+Provides a high-level understanding of market activity and historical performance across the selected period.
+
+**Screenshot:**
+
+![Market Overview](Dashboard_Screenshots/page1_market_overview.png)
+
+#### Page 2: Stock Performance
+
+**Objective:** Compare individual stock performance and identify historical winners and losers.
+
+Key elements:
+
+- Top-performing stocks.
+- Lowest-performing stocks.
+- Cumulative return comparison.
+- Stock price trends.
+- Moving average analysis.
+- Stock-level filtering.
+- Drill-down analysis.
+
+**Business Value:**
+
+Helps identify individual stocks that significantly outperformed or underperformed during the selected historical period.
+
+**Screenshot:**
+
+![Stock Performance](Dashboard_Screenshots/page2_stock_performance.png)
+
+#### Page 3: Volatility and Trading Activity
+
+**Objective:** Analyze historical risk indicators and trading behaviour.
+
+Key elements:
+
+- Stock volatility comparison.
+- Maximum drawdown analysis.
+- Trading volume analysis.
+- Relative volume.
+- Intraday price range.
+- Volatility versus daily return scatter plot.
+- Stock-level drillthrough.
+
+**Business Value:**
+
+Provides a more detailed understanding of historical price variability, downside movements, and trading activity.
+
+**Screenshot:**
+
+![Volatility and Activity](Dashboard_Screenshots/page3_volatility_activity.png)
+
+### Interactive Features
+
+- Year and Quarter slicers.
+- Stock Symbol filtering.
+- Cross-filtering between visuals.
+- Stock-level drillthrough.
+- Dynamic DAX calculations.
+- Interactive performance comparisons.
 
 ### Power BI Project File
-- [Download Interactive Power BI Dashboard (.pbix)](https://github.com/jerry-221/sp500-stock-market-analysis/blob/main/SP500_Dashboard.pbix)
 
-## 9. Key Insights & Findings
+[Download Interactive Power BI Report](SP500_Dashboard.pbix)
 
-The analysis revealed several significant patterns across the 2014-2017 market.
+## 10. Key Historical Insights
 
-**1. Extreme Outliers Drive Market Returns**
-While the market average steadily climbed, the top 10 cumulative returns were dominated by massive outliers. NVIDIA (`NVDA`) led the pack with an astonishing 1120% return, followed by Netflix (`NFLX`) at 270%. 
+The analysis identified several notable patterns across the 2014–2017 dataset.
 
-**2. The Energy Sector Collapse**
-The bottom 10 performers during this period were heavily concentrated in the energy sector. The 2014–2016 oil price crash dragged companies like Chesapeake Energy (`CHK`) and Range Resources (`RRC`) down by approximately 79% to 85%. 
+### 10.1 High-Performing Stocks
 
-**3. Volatility Clustering**
-Market volatility was noticeably higher in 2015 and 2016 (driven by the August 2015 flash crash and early 2016 global market panic) compared to the historically calm baseline of 2017, which showed the lowest average volatility.
+NVIDIA (NVDA) emerged as a significant historical outlier, with approximately 1,120% cumulative price appreciation based on the project's calculations.
 
-**4. Volume as a Price Signal**
-As visualized on Page 3, trading days with unusually high relative volume (3x the 30-day average or more) correlated with significantly wider intraday price ranges. This confirms that sudden volume spikes are reliable indicators of institutional activity or major news events.
+Netflix (NFLX) also demonstrated substantial historical growth, with approximately 270% cumulative appreciation.
 
-## 10. Repository Structure
+This highlights the difference between individual stock performance and broader market averages.
+
+### 10.2 Underperforming Stocks
+
+Several stocks experienced substantial declines during the selected period.
+
+Companies such as Chesapeake Energy (CHK) and Range Resources (RRC) appeared among the weaker historical performers, reflecting the pressure experienced by parts of the energy sector during the oil price downturn.
+
+### 10.3 Historical Volatility Patterns
+
+The analysis indicated higher volatility during parts of 2015 and 2016 compared with 2017.
+
+This demonstrates how historical market conditions can influence stock price variability.
+
+### 10.4 Trading Volume and Price Movements
+
+The analysis explored whether trading sessions with unusually high relative volume were associated with wider intraday price ranges.
+
+The results suggested a relationship between elevated trading activity and larger intraday movements in the analyzed observations.
+
+However, correlation does not establish causation, and high trading volume alone cannot confirm institutional activity or explain the reason behind a price movement.
+
+## 11. Challenges Faced and Solutions Implemented
+
+| Challenge | Solution | Reason |
+|---|---|---|
+| Missing OHLC values | Removed invalid observations | Avoid artificial financial values |
+| Duplicate records | Validated symbol and date combinations | Prevent double-counting |
+| Incorrect OHLC relationships | Applied logical validation rules | Maintain price consistency |
+| Isolated GOOG observation | Excluded the isolated record | Avoid misleading time-series analysis |
+| Incorrect return calculations | Used `pct_change(fill_method=None)` | Prevent automatic filling |
+| Rolling calculations across stocks | Used GroupBy before rolling calculations | Maintain stock-level separation |
+| Incorrect cumulative return calculation | Used CTEs and chronological window functions | Identify actual first and last prices |
+| Complex Power BI relationships | Implemented Star Schema | Improve model organization |
+| Dynamic dashboard calculations | Developed DAX measures | Support interactive filtering |
+
+## 12. Repository Structure
 
 ```text
 sp500-stock-market-analysis/
@@ -182,11 +575,138 @@ sp500-stock-market-analysis/
 ├── data_quality_report.csv
 │
 ├── S&P_500_Stock_Prices .ipynb
-├── sp500_analysis_queries.sql
+├── Untitled.ipynb
 │
+├── sp500_analysis_queries.sql
 ├── SP500_Dashboard.pbix
 │
 └── Dashboard_Screenshots/
     ├── page1_market_overview.png
     ├── page2_stock_performance.png
     └── page3_volatility_activity.png
+```
+
+## 13. How to Run This Project
+
+### Prerequisites
+
+- Python 3.10 or later
+- Jupyter Notebook or JupyterLab
+- MySQL 8.0
+- MySQL Workbench
+- Power BI Desktop
+- Git
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/jerry-221/sp500-stock-market-analysis.git
+
+cd sp500-stock-market-analysis
+```
+
+### Step 2: Install Required Python Libraries
+
+```bash
+pip install pandas numpy matplotlib seaborn sqlalchemy pymysql jupyter
+```
+
+### Step 3: Run Python Analysis
+
+1. Open the Jupyter Notebook.
+2. Execute the notebook cells in order.
+3. Inspect the raw dataset.
+4. Perform data cleaning and validation.
+5. Execute exploratory data analysis.
+6. Perform feature engineering.
+7. Generate the cleaned dataset.
+8. Generate the data quality report.
+
+### Step 4: Perform SQL Analysis
+
+1. Open MySQL Workbench.
+2. Create a database named `sp500_analysis`.
+3. Import the cleaned CSV into MySQL.
+4. Execute the SQL queries.
+5. Review the analytical outputs.
+
+### Step 5: Open the Power BI Report
+
+1. Open Power BI Desktop.
+2. Load `SP500_Dashboard.pbix`.
+3. Verify the data source paths.
+4. Refresh the dataset if necessary.
+5. Explore the three report pages.
+6. Interact with slicers, charts, and drillthrough functionality.
+
+## 14. Conclusion
+
+This project demonstrates a complete end-to-end data analytics workflow using real-world historical financial data.
+
+Starting with approximately 497,000 raw stock market records, the project progressed through data inspection, cleaning, validation, exploratory data analysis, feature engineering, SQL-based analysis, and interactive Power BI reporting.
+
+The most valuable part of this project was not simply creating visualizations, but understanding the problems within the data and selecting appropriate analytical methods to solve them.
+
+Python helped transform raw financial records into meaningful analytical features. MySQL enabled structured investigation through advanced SQL techniques. Power BI brought the findings together into an interactive reporting solution.
+
+Overall, the project strengthened practical skills in data preparation, analytical thinking, SQL querying, financial metrics, data modelling, and business intelligence.
+
+## 15. Future Improvements
+
+Although the project covers a complete historical analytical workflow, several improvements could make it more comprehensive.
+
+### Adjusted Closing Prices
+
+Incorporate adjusted closing prices to account for stock splits and dividends when calculating historical shareholder returns.
+
+### Sector-Level Analysis
+
+Integrate company-sector information to compare performance across Technology, Healthcare, Energy, Financials, and other industries.
+
+### Benchmark Comparison
+
+Compare individual stock performance against an appropriate market benchmark to understand relative performance.
+
+### Advanced Risk Analysis
+
+Introduce additional financial indicators such as Sharpe Ratio, Beta, and rolling correlation.
+
+### Predictive Analytics
+
+Explore time-series forecasting and machine learning techniques for studying historical price and volatility patterns.
+
+### Automated Data Pipeline
+
+Develop an automated workflow to collect, validate, process, and refresh financial datasets.
+
+## 16. Skills Demonstrated
+
+**Programming and Data Analysis**
+
+Python, Pandas, NumPy, Matplotlib, Seaborn, Exploratory Data Analysis, Data Cleaning, Feature Engineering.
+
+**Database and SQL**
+
+MySQL, Joins, Aggregations, Subqueries, CTEs, Window Functions, Ranking, Analytical Queries.
+
+**Business Intelligence**
+
+Power BI, Power Query, DAX, Star Schema, Data Modelling, Interactive Reporting, Drillthrough.
+
+**Analytical Skills**
+
+Data Quality Assurance, Financial Data Analysis, Trend Analysis, Performance Comparison, Volatility Analysis, Problem Solving, Business Insights.
+
+## 17. Author
+
+**Pranav Patil**
+
+Aspiring Data Analyst
+
+Skills: Python | MySQL | Power BI | Excel | Data Analytics
+
+GitHub: [Explore My GitHub Projects](https://github.com/jerry-221)
+
+---
+
+This project was developed as part of my practical learning journey in Data Analytics, with a focus on applying technical skills to real-world datasets and business problems.
