@@ -316,7 +316,7 @@ It helps identify overnight price differences between consecutive trading sessio
 
 **Feature:** `relative_volume`
 
-Compares daily trading volume with its 30-day average volume.
+Compares daily trading volume with its 30-day average volume...
 
 **Why it was used:**
 
